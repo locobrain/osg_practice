@@ -27,11 +27,9 @@ int main(_In_ int _Argc, _In_reads_(_Argc) _Pre_z_ char ** _Argv, _In_z_ char **
 	yMat->setAmbient(osg::Material::FRONT, osg::Vec4(0.0f, 1.0f, 0.0f, 0.0f));
 	yMat->setDiffuse(osg::Material::FRONT, osg::Vec4(0.0f, 1.0f, 0.0f, 0.0f));
 	yObj->getOrCreateStateSet()->setAttribute(yMat);
-
 #if 0	// 禁止光照后颜色材质是不生效的 [11/26/2018 brian.wang]
 	yObj->getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
 #endif
-	
 	root->addChild(yObj);
 
 	osg::ref_ptr<osg::Geode> zObj = new osg::Geode();
@@ -41,15 +39,9 @@ int main(_In_ int _Argc, _In_reads_(_Argc) _Pre_z_ char ** _Argv, _In_z_ char **
 	zMat->setDiffuse(osg::Material::FRONT, osg::Vec4(0.0f, 0.0f, 1.0f, 0.0f));
 	zObj->getOrCreateStateSet()->setAttribute(zMat);
 	root->addChild(zObj);
-
 	v.setSceneData(root);
 
-#if 0
-	v.setCamera(new osg::Camera());
-	v.getCamera()->setProjectionMatrixAsOrtho(-5.0f, 5.0f, -5.0f, 5.0f, 1.0f, 5.0f);
-#endif
-
-#if 0
+#if 0	// 貌似没什么用删除 [11/26/2018 brian.wang]
 	v.addEventHandler(new osgViewer::StatsHandler());
 #endif
 	
