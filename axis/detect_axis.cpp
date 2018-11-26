@@ -5,6 +5,7 @@
 #include <osg/Geode>
 #include <osg/ShapeDrawable>
 #include <osg/Material>
+#include <osg/GraphicsContext>
 
 int main(_In_ int _Argc, _In_reads_(_Argc) _Pre_z_ char ** _Argv, _In_z_ char ** _Env)
 {
@@ -39,11 +40,39 @@ int main(_In_ int _Argc, _In_reads_(_Argc) _Pre_z_ char ** _Argv, _In_z_ char **
 	zMat->setDiffuse(osg::Material::FRONT, osg::Vec4(0.0f, 0.0f, 1.0f, 0.0f));
 	zObj->getOrCreateStateSet()->setAttribute(zMat);
 	root->addChild(zObj);
+#if 0	// 这两种方案在本例中是没有差别的 [11/26/2018 brian.wang]
 	v.setSceneData(root);
+#else
+	v.getCamera()->addChild(root);
+#endif
+	// 如下代码没有效果 [11/26/2018 brian.wang]
+	//	v.getCamera()->getGraphicsContext()->setClearColor(osg::Vec4());
+
+	/*	如下代码竟然也没有效果
+	auto gc = osg::GraphicsContext::createGraphicsContext(new osg::GraphicsContext::Traits(*v.getCamera()->getGraphicsContext()->getTraits()));
+	gc->setClearColor(osg::Vec4());
+	v.getCamera()->setGraphicsContext(gc);
+	*/
+
+	/*	如下代码竟然也没有效果
+	auto camera_ =  v.getCamera();
+	auto _camera = new osg::Camera(*camera_);
+	auto gc = osg::GraphicsContext::createGraphicsContext(new osg::GraphicsContext::Traits(*v.getCamera()->getGraphicsContext()->getTraits()));
+	gc->setClearColor(osg::Vec4());
+	gc->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	_camera->setGraphicsContext(gc);
+	osg::StateSet* stateset = _camera->getOrCreateStateSet();
+	stateset->setGlobalDefaults();
+	v.setCamera(_camera);
+	*/
+
+	v.getCamera()->setClearColor(osg::Vec4());
+	
 
 #if 0	// 貌似没什么用删除 [11/26/2018 brian.wang]
 	v.addEventHandler(new osgViewer::StatsHandler());
 #endif
+	
 	
 	v.run();
 	return 0;
