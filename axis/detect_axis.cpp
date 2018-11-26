@@ -49,7 +49,9 @@ int main(_In_ int _Argc, _In_reads_(_Argc) _Pre_z_ char ** _Argv, _In_z_ char **
 	v.getCamera()->setProjectionMatrixAsOrtho(-5.0f, 5.0f, -5.0f, 5.0f, 1.0f, 5.0f);
 #endif
 
+#if 0
 	v.addEventHandler(new osgViewer::StatsHandler());
+#endif
 	
 	v.run();
 	return 0;
